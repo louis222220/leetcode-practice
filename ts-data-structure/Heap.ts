@@ -1,15 +1,23 @@
+type CompareFn = (a: number, b: number) => number;
+
 /** Max Heap */
 export class Heap {
 	private nums: number[] = [0];
 	private _length = 0;
+	private compareFn: CompareFn;
 
 	/** heapify */
-	constructor(nums: number[] = []) {
+	constructor(
+		nums: number[] = [],
+		compareFn: CompareFn = (a, b) => a - b
+	) {
 		this.nums = [0, ...nums];
 		this._length = nums.length;
+		this.compareFn = compareFn;
 
 		this.heapify();
 	}
+
 
 	get length(): number{
 		return this._length;
@@ -26,7 +34,7 @@ export class Heap {
 		while (true) {
 			const parentIndex = this.getParentIndex(currentIndex);
 			if (parentIndex < 1) break;
-			if (this.nums[parentIndex] < value) {
+			if (this.compareFn(value, this.nums[parentIndex]) > 0) {
 				this.swap(currentIndex, parentIndex);
 				currentIndex = parentIndex;
 			}
@@ -55,16 +63,25 @@ export class Heap {
 			const rightIndex = this.getRightChildIndex(currentIndex);
 
 			if (leftIndex > this._length) break;
-			if (rightIndex > this._length && this.nums[leftIndex] > value) {
+			if (
+				rightIndex > this._length &&
+				this.compareFn(this.nums[leftIndex], value) > 0
+			) {
 				this.swap(leftIndex, currentIndex);
 				break;
 			}
 
-			if (this.nums[leftIndex] > value && this.nums[leftIndex] >= this.nums[rightIndex]) {
+			if (
+				this.compareFn(this.nums[leftIndex], value) > 0 &&
+				this.compareFn(this.nums[leftIndex], this.nums[rightIndex]) >= 0
+			) {
 				this.swap(leftIndex, currentIndex);
 				currentIndex = leftIndex;
 			}
-			else if (this.nums[rightIndex] > value && this.nums[rightIndex] > this.nums[leftIndex]) {
+			else if (
+				this.compareFn(this.nums[rightIndex], value) > 0 &&
+				this.compareFn(this.nums[rightIndex], this.nums[leftIndex]) > 0
+			) {
 				this.swap(rightIndex, currentIndex);
 				currentIndex = rightIndex;
 			}

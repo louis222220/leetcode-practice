@@ -33,4 +33,22 @@ describe("Data Structure - Heap", () => {
 		}
 		expect(results).toEqual(expected);
 	});
+
+	it.each([
+		// nums: Array<number>, expected: Array<number>
+		[[], []],
+		[[10], [10]],
+		[[5, 10], [5, 10]],
+		[[10, 11, 12], [10, 11, 12]],
+		[[10, 10], [10, 10]],
+		[[1, 2, 5, 0, 10, 3], [0, 1, 2, 3, 5, 10]],
+	])("Heapify and pop all with min heap, input: %p, expected: %p", (nums, expected) => {
+		const heap = new Heap(nums, (a, b) => b - a);
+		const results = [];
+		while(heap.length > 0) {
+			const popped = heap.pop();
+			results.push(popped);
+		}
+		expect(results).toEqual(expected);
+	});
 });
