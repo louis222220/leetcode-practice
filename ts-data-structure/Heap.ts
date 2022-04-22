@@ -1,5 +1,5 @@
 /** Max Heap */
-class Heap {
+export class Heap {
 	private nums: number[] = [0];
 	private length = 0;
 
@@ -9,6 +9,10 @@ class Heap {
 		this.length = nums.length;
 
 		this.heapify();
+	}
+
+	top(): number {
+		return this.nums[1] ?? null;
 	}
 
 	push(value: number) {
@@ -92,24 +96,3 @@ class Heap {
 		return index * 2 + 1;
 	}
 }
-
-
-// const heap = new Heap([3,2,3,1,2,4,5,5,6]);
-// console.log(heap);
-
-// console.log(heap.pop(), heap);
-// console.log(heap.pop(), heap);
-// console.log(heap.pop(), heap);
-// console.log(heap.pop(), heap);
-
-
-
-const heap = new Heap();
-heap.push(1);
-heap.push(10);
-heap.push(15);
-heap.push(16);
-heap.push(3);
-heap.push(12);
-heap.push(20);
-console.log(heap);
