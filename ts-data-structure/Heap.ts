@@ -1,14 +1,18 @@
 /** Max Heap */
 export class Heap {
 	private nums: number[] = [0];
-	private length = 0;
+	private _length = 0;
 
 	/** heapify */
 	constructor(nums: number[] = []) {
 		this.nums = [0, ...nums];
-		this.length = nums.length;
+		this._length = nums.length;
 
 		this.heapify();
+	}
+
+	get length(): number{
+		return this._length;
 	}
 
 	top(): number {
@@ -17,8 +21,8 @@ export class Heap {
 
 	push(value: number) {
 		this.nums.push(value);
-		this.length++;
-		let currentIndex = this.length;
+		this._length++;
+		let currentIndex = this._length;
 		while (true) {
 			const parentIndex = this.getParentIndex(currentIndex);
 			if (parentIndex < 1) break;
@@ -31,18 +35,18 @@ export class Heap {
 	}
 
 	pop(): number {
-		const lastIndex = this.length;
+		const lastIndex = this._length;
 		const popValue = this.nums[1];
 		this.swap(1, lastIndex);
 		this.nums.pop();
-		this.length--;
+		this._length--;
 		this.siftDown(1);
 
 		return popValue;
 	}
 
 	private siftDown(index: number) {
-		if (index > this.length) return;
+		if (index > this._length) return;
 
 		const value = this.nums[index];
 		let currentIndex = index;
@@ -50,8 +54,8 @@ export class Heap {
 			const leftIndex = this.getLeftChildIndex(currentIndex);
 			const rightIndex = this.getRightChildIndex(currentIndex);
 
-			if (leftIndex > this.length) break;
-			if (rightIndex > this.length && this.nums[leftIndex] > value) {
+			if (leftIndex > this._length) break;
+			if (rightIndex > this._length && this.nums[leftIndex] > value) {
 				this.swap(leftIndex, currentIndex);
 				break;
 			}
@@ -69,8 +73,8 @@ export class Heap {
 	}
 
 	private heapify(): void {
-		if (this.length <= 1) return;
-		const lastParentIndex = this.getParentIndex(this.length);
+		if (this._length <= 1) return;
+		const lastParentIndex = this.getParentIndex(this._length);
 		for (let index = lastParentIndex; 1 <= index ; index--) {
 			this.siftDown(index);
 		}
