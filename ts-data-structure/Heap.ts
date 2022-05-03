@@ -1,39 +1,49 @@
-type CompareFn = (a: number, b: number) => number;
+type TypeHavingValueOf = {
+	valueOf: () => number | string | BigInt;
+};
+
+type CompareFn <T extends TypeHavingValueOf> = (a: T, b: T) => number;
 
 /** Max Heap */
-export class Heap {
-	private nums: number[] = [0];
+export class Heap <T extends TypeHavingValueOf = number> {
+	private nums: Array<T>;
 	private _length = 0;
-	private compareFn: CompareFn;
+	private compareFn: CompareFn<T>;
 
 	/** heapify */
 	constructor(
-		nums: number[] = [],
-		compareFn: CompareFn = (a, b) => a - b
+		nums: T[] = [],
+		compareFn: CompareFn<T> = (a, b) => {
+			if (a == b) return 0;
+			else if (a == null) return -1;
+			else if (b == null) return 1;
+			else if (a > b) return 1;
+			else return -1;
+		}
 	) {
-		this.nums = [0, ...nums];
+		this.nums = nums;
 		this._length = nums.length;
 		this.compareFn = compareFn;
 
 		this.heapify();
 	}
 
-
 	get length(): number{
 		return this._length;
 	}
 
-	top(): number {
-		return this.nums[1] ?? null;
+	top(): T | null {
+		return this.nums[0] ?? null;
 	}
 
-	push(value: number) {
+	push(value: T) {
 		this.nums.push(value);
 		this._length++;
-		let currentIndex = this._length;
+
+		let currentIndex = this._length - 1;
 		while (true) {
 			const parentIndex = this.getParentIndex(currentIndex);
-			if (parentIndex < 1) break;
+			if (parentIndex < 0) break;
 			if (this.compareFn(value, this.nums[parentIndex]) > 0) {
 				this.swap(currentIndex, parentIndex);
 				currentIndex = parentIndex;
@@ -42,19 +52,21 @@ export class Heap {
 		}
 	}
 
-	pop(): number {
-		const lastIndex = this._length;
-		const popValue = this.nums[1];
-		this.swap(1, lastIndex);
+	pop(): T | undefined {
+		const topIndex = 0;
+		const lastIndex = this._length - 1;
+
+		const popValue = this.nums[topIndex];
+		this.swap(topIndex, lastIndex);
 		this.nums.pop();
 		this._length--;
-		this.siftDown(1);
+		this.siftDown(0);
 
 		return popValue;
 	}
 
 	private siftDown(index: number) {
-		if (index > this._length) return;
+		if (index >= this._length) return;
 
 		const value = this.nums[index];
 		let currentIndex = index;
@@ -62,9 +74,9 @@ export class Heap {
 			const leftIndex = this.getLeftChildIndex(currentIndex);
 			const rightIndex = this.getRightChildIndex(currentIndex);
 
-			if (leftIndex > this._length) break;
+			if (leftIndex >= this._length) break;
 			if (
-				rightIndex > this._length &&
+				rightIndex >= this._length &&
 				this.compareFn(this.nums[leftIndex], value) > 0
 			) {
 				this.swap(leftIndex, currentIndex);
@@ -91,8 +103,10 @@ export class Heap {
 
 	private heapify(): void {
 		if (this._length <= 1) return;
-		const lastParentIndex = this.getParentIndex(this._length);
-		for (let index = lastParentIndex; 1 <= index ; index--) {
+
+		const lastIndex = this._length - 1;
+		const lastParentIndex = this.getParentIndex(lastIndex);
+		for (let index = lastParentIndex; index >= 0 ; index--) {
 			this.siftDown(index);
 		}
 	}
@@ -106,14 +120,14 @@ export class Heap {
 	}
 
 	private getParentIndex(index: number): number {
-		return Math.floor(index / 2)
+		return Math.floor((index - 1) / 2)
 	}
 
 	private getLeftChildIndex(index: number): number {
-		return index * 2;
+		return index * 2 + 1;
 	}
 
 	private getRightChildIndex(index: number): number {
-		return index * 2 + 1;
+		return index * 2 + 2;
 	}
 }
