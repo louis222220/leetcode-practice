@@ -51,4 +51,29 @@ describe("Data Structure - Heap", () => {
 		}
 		expect(results).toEqual(expected);
 	});
+
+	it.only('Generic: custom class', () => {
+		class MyClass{
+			private num: number;
+			constructor(num: number) {
+				this.num = num;
+			}
+			valueOf() {
+				return this.num;
+			}
+		}
+		const heap = new Heap<MyClass>();
+		heap.push(new MyClass(3));
+		heap.push(new MyClass(5));
+		heap.push(new MyClass(2));
+		heap.push(new MyClass(10));
+		console.log(heap);
+
+		const results = [];
+		while(heap.length > 0) {
+			const popped = heap.pop();
+			results.push(popped?.valueOf());
+		}
+		expect(results).toEqual([10, 5, 3, 2]);
+	});
 });
