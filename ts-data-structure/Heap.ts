@@ -52,7 +52,7 @@ export class Heap <T extends TypeHavingValueOf = number> {
 		}
 	}
 
-	pop(): T | undefined {
+	pop(): T {
 		const topIndex = 0;
 		const lastIndex = this._length - 1;
 
