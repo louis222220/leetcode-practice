@@ -52,7 +52,7 @@ describe("Data Structure - Heap", () => {
 		expect(results).toEqual(expected);
 	});
 
-	it.only('Generic: custom class', () => {
+	it('Generic: custom class', () => {
 		class MyClass{
 			private num: number;
 			constructor(num: number) {

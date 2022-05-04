@@ -75,11 +75,10 @@ export class Heap <T extends TypeHavingValueOf = number> {
 			const rightIndex = this.getRightChildIndex(currentIndex);
 
 			if (leftIndex >= this._length) break;
-			if (
-				rightIndex >= this._length &&
-				this.compareFn(this.nums[leftIndex], value) > 0
-			) {
-				this.swap(leftIndex, currentIndex);
+			if (rightIndex >= this._length) {
+				if (this.compareFn(this.nums[leftIndex], value) > 0) {
+					this.swap(leftIndex, currentIndex);
+				}
 				break;
 			}
 
